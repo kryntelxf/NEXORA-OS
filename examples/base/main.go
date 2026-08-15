@@ -14,6 +14,9 @@ import (
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"github.com/pocketbase/pocketbase/tools/hook"
 	"github.com/pocketbase/pocketbase/tools/osutils"
+
+	// Nexora plugin - ADDED
+	"github.com/pocketbase/pocketbase/nexora"
 )
 
 func main() {
@@ -102,6 +105,9 @@ func main() {
 
 	// GitHub selfupdate
 	ghupdate.MustRegister(app, app.RootCmd, ghupdate.Config{})
+
+	// Register Nexora plugin - ADDED
+	nexora.Register(app)
 
 	// static route to serves files from the provided public dir
 	// (if publicDir exists and the route path is not already defined)
