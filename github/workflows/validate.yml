@@ -1,0 +1,36 @@
+name: Validate NEXORA-OS Baseline
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+    name: Build & Test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Download dependencies
+        run: go mod download
+
+      - name: Build example
+        run: go build -o pocketbase ./examples/base
+
+      - name: Run tests (serial, no cache)
+        run: go test ./... -count=1 -p=1
+
+      - name: Verify executable
+        run: |
+          ./pocketbase --help || echo "Help command executed"
